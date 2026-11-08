@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_module">
+    <sys_module action="INSERT_OR_UPDATE">
+        <content><![CDATA[import { GlideRecord, GlideSysAttachment } from '@servicenow/glide';
+import { T, me } from './auth';
+import { badRequest, conflict, notFound, requireSysId } from './http';
+import { profileBundle } from './profiles';
+import { computeReadiness } from './readiness';
+import { responseJson } from './responses';
+const CHANNELS = ['claude', 'copilot', 'portal', 'other'];
+export const TRANSCRIPT_FILE = 'intake-transcript.md';
+export function sessionJson(s) {
+    return {
+        session_id: s.getUniqueValue(),
+        number: s.getValue('number'),
+        profile_id: s.getValue('profile'),
+        profile_name: s.getDisplayValue('profile'),
+        requester: s.getDisplayValue('requester'),
+        channel: s.getValue('channel'),
+        state: s.getValue('state'),
+        readiness_score: parseInt(s.getValue('readiness_score') || '0', 10),
+        summary: s.getValue('summary') || '',
+        transcript_retention: s.getValue('transcript_retention'),
+        target_table: s.getValue('target_table') || null,
+        target_record: s.getValue('target_record') || null,
+        submitted_on: s.getValue('submitted_on') || null,
+        created_on: s.getValue('sys_created_on'),
+    };
+}
+/** Starts a session, snapshotting the profile's retention policy. */
+export function startSession(input) {
+    const profileId = requireSysId(input.profile_id || '', 'profile_id');
+    const bundle = profileBundle(profileId); // throws if inactive / missing
+    const channel = input.channel || 'other';
+    if (CHANNELS.indexOf(channel) < 0)
+        throw badRequest('channel must be one of ' + CHANNELS.join(', '));
+    const p = new GlideRecord(T.profile);
+    p.get(profileId);
+    const s = new GlideRecord(T.session);
+    s.initialize();
+    s.setValue('profile', profileId);
+    s.setValue('requester', me());
+    s.setValue('channel', channel);
+    s.setValue('state', 'in_progress');
+    s.setValue('readiness_score', 0);
+    s.setValue('transcript_retention', p.getValue('transcript_retention') || 'summary');
+    if (!s.insert())
+        throw badRequest('Session could not be created');
+    return { session: sessionJson(s), profile: bundle, readiness: computeReadiness(s) };
+}
+/** Full session view for resuming a conversation. */
+export function getSession(s) {
+    const responses = [];
+    const r = new GlideRecord(T.response);
+    r.addQuery('session', s.getUniqueValue());
+    r.orderBy('sys_created_on');
+    r.query();
+    while (r.next())
+        responses.push(responseJson(r));
+    return {
+        session: sessionJson(s),
+        profile: profileBundle(s.getValue('profile')),
+        responses,
+        readiness: computeReadiness(s, false),
+    };
+}
+/** The caller's own sessions, newest first. */
+export function listMySessions(state) {
+    const out = [];
+    const s = new GlideRecord(T.session);
+    s.addQuery('requester', me());
+    if (state)
+        s.addQuery('state', state);
+    s.orderByDesc('sys_updated_on');
+    s.setLimit(50);
+    s.query();
+    while (s.next())
+        out.push(sessionJson(s));
+    return out;
+}
+/**
+ * Updates the AI summary. Retention policy is enforced at write time:
+ * a 'none' session never stores a summary in the first place.
+ */
+export function updateSummary(s, summary) {
+    requireInProgress(s);
+    if (typeof summary !== 'string')
+        throw badRequest('summary must be a string');
+    if (s.getValue('transcript_retention') === 'none') {
+        return { stored: false, reason: 'Retention policy for this session is None — responses only' };
+    }
+    s.setValue('summary', summary.substring(0, 8000));
+    s.update();
+    return { stored: true };
+}
+/** Stores or replaces the transcript attachment — only when policy is 'full'. */
+export function storeTranscript(s, content) {
+    requireInProgress(s);
+    if (typeof content !== 'string' || !content)
+        throw badRequest('transcript must be a non-empty string');
+    if (s.getValue('transcript_retention') !== 'full') {
+        return { stored: false, reason: 'Retention policy for this session does not keep full transcripts' };
+    }
+    deleteTranscripts(s);
+    const att = new GlideSysAttachment();
+    const id = att.write(s, TRANSCRIPT_FILE, 'text/markdown', content);
+    if (!id)
+        throw badRequest('Transcript could not be attached');
+    return { stored: true, attachment_id: id };
+}
+export function deleteTranscripts(s) {
+    const a = new GlideRecord('sys_attachment');
+    a.addQuery('table_name', T.session);
+    a.addQuery('table_sys_id', s.getUniqueValue());
+    a.addQuery('file_name', TRANSCRIPT_FILE);
+    a.query();
+    const att = new GlideSysAttachment();
+    while (a.next())
+        att.deleteAttachment(a.getUniqueValue());
+}
+export function abandonSession(s) {
+    requireInProgress(s);
+    s.setValue('state', 'abandoned');
+    s.update();
+    deleteTranscripts(s);
+    return { session: sessionJson(s) };
+}
+export function requireInProgress(s) {
+    if (!s)
+        throw notFound('Session');
+    if (s.getValue('state') !== 'in_progress') {
+        throw conflict('session_closed', 'Session is ' + s.getValue('state'));
+    }
+}
+]]></content>
+        <external_source>false</external_source>
+        <path>x_312586_gintake/guided-intake/0.0.1/src/server/lib/sessions.ts</path>
+        <sys_class_name>sys_module</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-11-07 19:20:56</sys_created_on>
+        <sys_id>914bb6fb83e54707911db140932f7945</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_312586_gintake/guided-intake/0.0.1/src/server/lib/sessions.ts</sys_name>
+        <sys_package display_value="Guided Intake" source="x_312586_gintake">21ca5ceb83d85bd01197cc65eeaad3bf</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Guided Intake">21ca5ceb83d85bd01197cc65eeaad3bf</sys_scope>
+        <sys_update_name>sys_module_914bb6fb83e54707911db140932f7945</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-11-07 19:20:56</sys_updated_on>
+    </sys_module>
+</record_update>

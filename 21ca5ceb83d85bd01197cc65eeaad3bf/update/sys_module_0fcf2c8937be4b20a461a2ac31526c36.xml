@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_module">
+    <sys_module action="INSERT_OR_UPDATE">
+        <content><![CDATA[import { gs, GlideRecord, GlideRecordSecure, GlideDateTime } from '@servicenow/glide';
+import { FlowAPI } from '@servicenow/glide/sn_fd';
+import { T } from './auth';
+import { ApiError, conflict, forbidden } from './http';
+import { computeReadiness } from './readiness';
+import { deleteTranscripts, requireInProgress, sessionJson } from './sessions';
+/*
+ * Submit contract for profile subflows
+ * ------------------------------------
+ * Inputs (all strings):
+ *   session_sys_id   the intake session; use it for idempotency checks
+ *   requester        sys_user sys_id of the requester
+ *   summary          AI summary ('' when retention is None)
+ *   field_values     JSON object { <target column>: <value> } built from maps_to_field
+ *   readiness_score  0–100
+ * Outputs:
+ *   target_sys_id    sys_id of the created/updated record (required)
+ *   target_table     table of that record (optional; defaults to the profile's)
+ *
+ * With no subflow configured, the platform inserts into the target table
+ * directly with GlideRecordSecure, so the requester's own create ACLs apply:
+ * intake never becomes a privilege-escalation path into a target table.
+ */
+export function submitSession(s, input) {
+    requireInProgress(s);
+    const readiness = computeReadiness(s);
+    if (!readiness.ready && !input.acknowledge_gaps) {
+        // Not a gate: the agent must surface the gaps and get explicit agreement.
+        throw conflict('not_ready', 'Readiness is below threshold or must-have criteria are open. Resubmit with acknowledge_gaps=true after confirming with the requester.', readiness);
+    }
+    const profile = new GlideRecord(T.profile);
+    profile.get(s.getValue('profile'));
+    const defaultTable = profile.getValue('target_table');
+    const fieldValues = buildFieldValues(s, defaultTable);
+    const summary = s.getValue('transcript_retention') === 'none' ? '' : s.getValue('summary') || '';
+    const target = profile.getValue('submit_subflow')
+        ? runSubflow(profile, s, fieldValues, summary, readiness.score, defaultTable)
+        : defaultInsert(defaultTable, fieldValues);
+    // Re-check state immediately before committing, guarding against a double submit.
+    const fresh = new GlideRecord(T.session);
+    fresh.get(s.getUniqueValue());
+    requireInProgress(fresh);
+    fresh.setValue('state', 'submitted');
+    fresh.setValue('submitted_on', new GlideDateTime().getValue());
+    fresh.setValue('target_table', target.table);
+    fresh.setValue('target_record', target.sysId);
+    fresh.setValue('readiness_score', readiness.score);
+    applyRetention(fresh, profile);
+    fresh.update();
+    backfillResponses(fresh.getUniqueValue(), target.table, target.sysId);
+    return {
+        session: sessionJson(fresh),
+        readiness,
+        acknowledged_gaps: !readiness.ready,
+        target: {
+            table: target.table,
+            sys_id: target.sysId,
+            display_value: target.display,
+            url: gs.getProperty('glide.servlet.uri') + target.table + '.do?sys_id=' + target.sysId,
+        },
+    };
+}
+/**
+ * Builds { column: value } from Profile Criteria with maps_to_field.
+ * Typed answers use answer_value; text falls back to the AI summary, then
+ * the requester's own words. Invalid mappings are skipped and logged rather
+ * than failing the requester's submit for a configuration mistake.
+ */
+function buildFieldValues(s, targetTable) {
+    const probe = new GlideRecord(targetTable);
+    const values = {};
+    const pc = new GlideRecord(T.profCrit);
+    pc.addQuery('profile', s.getValue('profile'));
+    pc.addQuery('active', true);
+    pc.addNotNullQuery('maps_to_field');
+    pc.query();
+    while (pc.next()) {
+        const field = pc.getValue('maps_to_field');
+        if (!probe.isValidField(field)) {
+            gs.warn('[Guided Intake] Profile criterion ' + pc.getUniqueValue() + ' maps to unknown field ' + targetTable + '.' + field);
+            continue;
+        }
+        const r = new GlideRecord(T.response);
+        r.addQuery('session', s.getUniqueValue());
+        r.addQuery('criterion', pc.getValue('criterion'));
+        r.addQuery('status', 'IN', 'answered,partial');
+        r.orderByDesc('answered_on');
+        r.setLimit(1);
+        r.query();
+        if (!r.next())
+            continue;
+        const v = r.getValue('answer_value') || r.getValue('ai_summary') || r.getValue('requester_verbatim') || '';
+        if (v)
+            values[field] = v;
+    }
+    return values;
+}
+function runSubflow(profile, s, fieldValues, summary, score, defaultTable) {
+    const flow = profile.submit_subflow.getRefRecord();
+    const name = flow.sys_scope.scope + '.' + flow.getValue('internal_name');
+    let outputs;
+    try {
+        const result = FlowAPI.getRunner()
+            .subflow(name)
+            .inForeground()
+            .timeout(60000)
+            .withInputs({
+            session_sys_id: s.getUniqueValue(),
+            requester: s.getValue('requester'),
+            summary,
+            field_values: JSON.stringify(fieldValues),
+            readiness_score: String(score),
+        })
+            .run();
+        outputs = result.getOutputs() || {};
+    }
+    catch (e) {
+        gs.error('[Guided Intake] Submit subflow ' + name + ' failed for ' + s.getValue('number') + ': ' + (e && e.message));
+        throw new ApiError(502, 'submit_failed', 'The submit process failed; the session is still open and can be retried.');
+    }
+    const table = String(outputs.target_table || defaultTable);
+    const sysId = String(outputs.target_sys_id || '');
+    const rec = new GlideRecord(table);
+    if (!/^[0-9a-f]{32}$/.test(sysId) || !rec.isValid() || !rec.get(sysId)) {
+        gs.error('[Guided Intake] Subflow ' + name + ' returned no valid target_sys_id for ' + s.getValue('number'));
+        throw new ApiError(502, 'submit_failed', 'The submit process did not return a target record; the session is still open.');
+    }
+    return { table, sysId, display: rec.getDisplayValue() };
+}
+function defaultInsert(table, fieldValues) {
+    const rec = new GlideRecordSecure(table);
+    rec.initialize();
+    if (!rec.canCreate())
+        throw forbidden('You do not have permission to create ' + table + ' records');
+    for (const f in fieldValues)
+        rec.setValue(f, fieldValues[f]);
+    const sysId = rec.insert();
+    if (!sysId)
+        throw new ApiError(422, 'target_rejected', 'The target record was rejected (check mandatory fields and data policies on ' + table + ').');
+    return { table, sysId: String(sysId), display: rec.getDisplayValue() };
+}
+/**
+ * Applies retention at submit. None and Summary never stored a transcript
+ * (enforced at write time); this is a belt-and-braces cleanup. Full sets a
+ * purge date from the profile's retention days at the time of submit.
+ */
+function applyRetention(s, profile) {
+    const mode = s.getValue('transcript_retention');
+    if (mode === 'none') {
+        s.setValue('summary', '');
+        deleteTranscripts(s);
+        return;
+    }
+    if (mode === 'summary') {
+        deleteTranscripts(s);
+        return;
+    }
+    const days = parseInt(profile.getValue('transcript_retention_days') || '0', 10);
+    if (days > 0) {
+        const purge = new GlideDateTime();
+        purge.addDaysUTC(days);
+        s.setValue('transcript_purge_on', purge.getDate().getByFormat('yyyy-MM-dd'));
+    }
+}
+function backfillResponses(sessionId, table, sysId) {
+    const r = new GlideRecord(T.response);
+    r.addQuery('session', sessionId);
+    r.setValue('target_table', table);
+    r.setValue('target_record', sysId);
+    r.updateMultiple();
+}
+]]></content>
+        <external_source>false</external_source>
+        <path>x_312586_gintake/guided-intake/0.0.1/src/server/lib/submit.ts</path>
+        <sys_class_name>sys_module</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-11-07 19:20:56</sys_created_on>
+        <sys_id>0fcf2c8937be4b20a461a2ac31526c36</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_312586_gintake/guided-intake/0.0.1/src/server/lib/submit.ts</sys_name>
+        <sys_package display_value="Guided Intake" source="x_312586_gintake">21ca5ceb83d85bd01197cc65eeaad3bf</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Guided Intake">21ca5ceb83d85bd01197cc65eeaad3bf</sys_scope>
+        <sys_update_name>sys_module_0fcf2c8937be4b20a461a2ac31526c36</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-11-07 19:20:56</sys_updated_on>
+    </sys_module>
+</record_update>

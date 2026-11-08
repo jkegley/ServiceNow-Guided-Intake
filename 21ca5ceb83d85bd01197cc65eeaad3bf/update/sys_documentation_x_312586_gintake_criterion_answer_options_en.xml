@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_documentation element="answer_options" label="Answer options" language="en" table="x_312586_gintake_criterion">
+        <sys_documentation action="INSERT_OR_UPDATE">
+            <element>answer_options</element>
+            <help/>
+            <hint>For Choice: one value|label per line. For Reference: the referenced table name.</hint>
+            <label>Answer options</label>
+            <language>en</language>
+            <name>x_312586_gintake_criterion</name>
+            <plural>Answer options</plural>
+            <sys_class_name>sys_documentation</sys_class_name>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-07 19:20:27</sys_created_on>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>Answer options</sys_name>
+            <sys_package display_value="Guided Intake" source="x_312586_gintake">21ca5ceb83d85bd01197cc65eeaad3bf</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="Guided Intake">21ca5ceb83d85bd01197cc65eeaad3bf</sys_scope>
+            <sys_update_name>sys_documentation_x_312586_gintake_criterion_answer_options_en</sys_update_name>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-07 19:20:27</sys_updated_on>
+            <url/>
+            <url_target/>
+        </sys_documentation>
+    </sys_documentation>
+</record_update>

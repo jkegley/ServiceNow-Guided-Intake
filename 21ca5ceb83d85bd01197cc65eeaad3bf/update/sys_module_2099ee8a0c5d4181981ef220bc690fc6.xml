@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_module">
+    <sys_module action="INSERT_OR_UPDATE">
+        <content><![CDATA[import { gs, GlideRecord } from '@servicenow/glide';
+import { T, me, isReviewer } from './auth';
+import { badRequest, forbidden, requireSysId } from './http';
+import { responseJson } from './responses';
+/**
+ * Reviewer raises a follow-up on a session (any state except abandoned).
+ * Lands as a Response with status 'requested'; the requester's next
+ * conversation picks it up via GET /followups.
+ */
+export function raiseFollowUp(s, input) {
+    if (!isReviewer())
+        throw forbidden('Only reviewers can raise follow-up questions');
+    if (s.getValue('state') === 'abandoned')
+        throw badRequest('Cannot raise follow-ups on an abandoned session');
+    const question = (input.question || '').trim();
+    if (!question)
+        throw badRequest('question is required');
+    const r = new GlideRecord(T.response);
+    r.initialize();
+    r.setValue('session', s.getUniqueValue());
+    if (input.criterion_id)
+        r.setValue('criterion', requireSysId(input.criterion_id, 'criterion_id'));
+    r.setValue('question_asked', question.substring(0, 1000));
+    r.setValue('status', 'requested');
+    r.setValue('asked_by', 'assessor');
+    r.setValue('asked_by_user', me());
+    r.setValue('target_table', s.getValue('target_table'));
+    r.setValue('target_record', s.getValue('target_record'));
+    const id = r.insert();
+    if (!id)
+        throw badRequest('Follow-up could not be saved');
+    // Hook for notifications: subscribe a Notification or Flow to this event.
+    gs.eventQueue('x_312586_gintake.followup.raised', r, s.getValue('requester'), s.getValue('number'));
+    return responseJson(r);
+}
+/** Open follow-ups addressed to the caller, across all of their sessions. */
+export function myOpenFollowUps() {
+    const out = [];
+    const r = new GlideRecord(T.response);
+    r.addQuery('status', 'requested');
+    r.addQuery('session.requester', me());
+    r.orderBy('sys_created_on');
+    r.setLimit(100);
+    r.query();
+    while (r.next()) {
+        out.push({
+            ...responseJson(r),
+            session_id: r.getValue('session'),
+            session_number: r.getDisplayValue('session'),
+            profile_name: r.session.profile.getDisplayValue(),
+            target_table: r.getValue('target_table') || null,
+            target_record: r.getValue('target_record') || null,
+            raised_on: r.getValue('sys_created_on'),
+        });
+    }
+    return out;
+}
+]]></content>
+        <external_source>false</external_source>
+        <path>x_312586_gintake/guided-intake/0.0.1/src/server/lib/followups.ts</path>
+        <sys_class_name>sys_module</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-11-07 19:20:56</sys_created_on>
+        <sys_id>2099ee8a0c5d4181981ef220bc690fc6</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_312586_gintake/guided-intake/0.0.1/src/server/lib/followups.ts</sys_name>
+        <sys_package display_value="Guided Intake" source="x_312586_gintake">21ca5ceb83d85bd01197cc65eeaad3bf</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Guided Intake">21ca5ceb83d85bd01197cc65eeaad3bf</sys_scope>
+        <sys_update_name>sys_module_2099ee8a0c5d4181981ef220bc690fc6</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-11-07 19:20:56</sys_updated_on>
+    </sys_module>
+</record_update>

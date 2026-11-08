@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_choice action="INSERT_OR_UPDATE" field="answer_type" table="x_312586_gintake_criterion" version="3">
+        <sys_choice_set action="INSERT_OR_UPDATE">
+            <element>answer_type</element>
+            <name>x_312586_gintake_criterion</name>
+            <sys_class_name>sys_choice_set</sys_class_name>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-07 19:20:28</sys_created_on>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>answer_type</sys_name>
+            <sys_package display_value="Guided Intake" source="x_312586_gintake">21ca5ceb83d85bd01197cc65eeaad3bf</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="Guided Intake">21ca5ceb83d85bd01197cc65eeaad3bf</sys_scope>
+            <sys_update_name>sys_choice_x_312586_gintake_criterion_answer_type</sys_update_name>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-07 19:20:28</sys_updated_on>
+        </sys_choice_set>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>answer_type</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Text</label>
+            <language>en</language>
+            <name>x_312586_gintake_criterion</name>
+            <sequence>0</sequence>
+            <synonyms/>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-07 19:22:49</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-07 19:22:49</sys_updated_on>
+            <value>text</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>answer_type</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Number</label>
+            <language>en</language>
+            <name>x_312586_gintake_criterion</name>
+            <sequence>1</sequence>
+            <synonyms/>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-07 19:22:49</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-07 19:22:49</sys_updated_on>
+            <value>number</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>answer_type</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Date</label>
+            <language>en</language>
+            <name>x_312586_gintake_criterion</name>
+            <sequence>2</sequence>
+            <synonyms/>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-07 19:22:49</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-07 19:22:49</sys_updated_on>
+            <value>date</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>answer_type</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Yes / No</label>
+            <language>en</language>
+            <name>x_312586_gintake_criterion</name>
+            <sequence>3</sequence>
+            <synonyms/>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-07 19:22:49</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-07 19:22:49</sys_updated_on>
+            <value>boolean</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>answer_type</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Choice</label>
+            <language>en</language>
+            <name>x_312586_gintake_criterion</name>
+            <sequence>4</sequence>
+            <synonyms/>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-07 19:22:49</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-07 19:22:49</sys_updated_on>
+            <value>choice</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>answer_type</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Reference</label>
+            <language>en</language>
+            <name>x_312586_gintake_criterion</name>
+            <sequence>5</sequence>
+            <synonyms/>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-07 19:22:49</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-07 19:22:49</sys_updated_on>
+            <value>reference</value>
+        </sys_choice>
+    </sys_choice>
+</record_update>

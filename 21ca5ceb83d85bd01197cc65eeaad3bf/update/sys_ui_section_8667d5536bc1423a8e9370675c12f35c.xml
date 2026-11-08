@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_ui_section caption="Criterion" section_id="8667d5536bc1423a8e9370675c12f35c" sys_domain="global" table="x_312586_gintake_criterion" version="3" view="">
+        <sys_ui_annotation action="INSERT_OR_UPDATE">
+            <is_plain_text>true</is_plain_text>
+            <name/>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-07 19:22:46</sys_created_on>
+            <sys_id>59fa0c6b1a224c44af2d35a0af874e1f</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-07 19:22:46</sys_updated_on>
+            <text>This criterion is shared across every profile that uses it. Put profile-specific coaching on the Profile Criterion instead.</text>
+            <type display_value="Info Box Blue">753f88a80f930000b12e6903cfe01206</type>
+        </sys_ui_annotation>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>.begin_split</element>
+            <position>0</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-07 19:22:46</sys_created_on>
+            <sys_id>6022602fede8494191e3a55f44d09ae5</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="Criterion" display_value="Criterion" name="x_312586_gintake_criterion" sys_domain="global" view="Default view">8667d5536bc1423a8e9370675c12f35c</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-07 19:22:46</sys_updated_on>
+            <sys_user/>
+            <type>.begin_split</type>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>name</element>
+            <position>1</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-07 19:22:46</sys_created_on>
+            <sys_id>7c5536c11b124f1faef535f1a21ae670</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="Criterion" display_value="Criterion" name="x_312586_gintake_criterion" sys_domain="global" view="Default view">8667d5536bc1423a8e9370675c12f35c</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-07 19:22:46</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>category</element>
+            <position>2</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-07 19:22:46</sys_created_on>
+            <sys_id>3877db37030a4b28b5f8b10c0118df6a</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="Criterion" display_value="Criterion" name="x_312586_gintake_criterion" sys_domain="global" view="Default view">8667d5536bc1423a8e9370675c12f35c</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-07 19:22:46</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>.split</element>
+            <position>3</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-07 19:22:46</sys_created_on>
+            <sys_id>1d68f8392fa44c58bd5b808e1e77b247</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="Criterion" display_value="Criterion" name="x_312586_gintake_criterion" sys_domain="global" view="Default view">8667d5536bc1423a8e9370675c12f35c</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-07 19:22:46</sys_updated_on>
+            <sys_user/>
+            <type>.split</type>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>active</element>
+            <position>4</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-07 19:22:46</sys_created_on>
+            <sys_id>d0612c1f919b4bac95fda12c0c421b99</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="Criterion" display_value="Criterion" name="x_312586_gintake_criterion" sys_domain="global" view="Default view">8667d5536bc1423a8e9370675c12f35c</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-07 19:22:46</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>answer_type</element>
+            <position>5</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-07 19:22:46</sys_created_on>
+            <sys_id>1885f6a8aba142a7bb117f4e50e8044c</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="Criterion" display_value="Criterion" name="x_312586_gintake_criterion" sys_domain="global" view="Default view">8667d5536bc1423a8e9370675c12f35c</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-07 19:22:46</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>.end_split</element>
+            <position>6</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-07 19:22:46</sys_created_on>
+            <sys_id>1f298479576847bc8a3c5af18c6ee5c3</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="Criterion" display_value="Criterion" name="x_312586_gintake_criterion" sys_domain="global" view="Default view">8667d5536bc1423a8e9370675c12f35c</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-07 19:22:46</sys_updated_on>
+            <sys_user/>
+            <type>.end_split</type>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>59fa0c6b1a224c44af2d35a0af874e1f</element>
+            <position>7</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-07 19:22:46</sys_created_on>
+            <sys_id>5208bd8d31864f9895738508eeec70a9</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="Criterion" display_value="Criterion" name="x_312586_gintake_criterion" sys_domain="global" view="Default view">8667d5536bc1423a8e9370675c12f35c</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-07 19:22:46</sys_updated_on>
+            <sys_user/>
+            <type>annotation</type>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>question_intent</element>
+            <position>8</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-07 19:22:46</sys_created_on>
+            <sys_id>c267f03f009a42408a90ccf98d73e0e6</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="Criterion" display_value="Criterion" name="x_312586_gintake_criterion" sys_domain="global" view="Default view">8667d5536bc1423a8e9370675c12f35c</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-07 19:22:46</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>why_it_matters</element>
+            <position>9</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-07 19:22:46</sys_created_on>
+            <sys_id>14ac3956cbc043ad9654cdc68e32f730</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="Criterion" display_value="Criterion" name="x_312586_gintake_criterion" sys_domain="global" view="Default view">8667d5536bc1423a8e9370675c12f35c</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-07 19:22:46</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>coaching_hints</element>
+            <position>10</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-07 19:22:46</sys_created_on>
+            <sys_id>8e1799e059f94e24887b2dc3bb268424</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="Criterion" display_value="Criterion" name="x_312586_gintake_criterion" sys_domain="global" view="Default view">8667d5536bc1423a8e9370675c12f35c</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-07 19:22:46</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>good_answer_example</element>
+            <position>11</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-07 19:22:46</sys_created_on>
+            <sys_id>0dbaa590877c4d8cb88953655c1c7da0</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="Criterion" display_value="Criterion" name="x_312586_gintake_criterion" sys_domain="global" view="Default view">8667d5536bc1423a8e9370675c12f35c</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-07 19:22:46</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>answer_options</element>
+            <position>12</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-07 19:22:46</sys_created_on>
+            <sys_id>ff8d8e5fdab144b991280d9255d4b10d</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="Criterion" display_value="Criterion" name="x_312586_gintake_criterion" sys_domain="global" view="Default view">8667d5536bc1423a8e9370675c12f35c</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-07 19:22:46</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_section action="INSERT_OR_UPDATE">
+            <caption>Criterion</caption>
+            <header>false</header>
+            <name>x_312586_gintake_criterion</name>
+            <roles/>
+            <sys_class_name>sys_ui_section</sys_class_name>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-07 19:21:05</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>8667d5536bc1423a8e9370675c12f35c</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>x_312586_gintake_criterion</sys_name>
+            <sys_overrides/>
+            <sys_package display_value="Guided Intake" source="x_312586_gintake">21ca5ceb83d85bd01197cc65eeaad3bf</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="Guided Intake">21ca5ceb83d85bd01197cc65eeaad3bf</sys_scope>
+            <sys_update_name>sys_ui_section_8667d5536bc1423a8e9370675c12f35c</sys_update_name>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-07 19:21:05</sys_updated_on>
+            <sys_user/>
+            <title>false</title>
+            <view display_value="Default view" name="NULL">Default view</view>
+            <view_name/>
+        </sys_ui_section>
+    </sys_ui_section>
+</record_update>

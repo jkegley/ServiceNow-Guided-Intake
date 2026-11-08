@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_module">
+    <sys_module action="INSERT_OR_UPDATE">
+        <content><![CDATA[{
+  "$schema": "http://cyclonedx.org/schema/bom-1.6.schema.json",
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "version": 1,
+  "metadata": {
+    "tools": {
+      "components": [
+        {
+          "type": "library",
+          "name": "sdk-build-plugins",
+          "group": "@servicenow",
+          "version": "4.14.0",
+          "author": "ServiceNow"
+        }
+      ]
+    },
+    "component": {
+      "type": "application",
+      "name": "guided-intake",
+      "version": "0.0.1",
+      "bom-ref": "pkg:servicenow/guided-intake@0.0.1?sys_scope_id=21ca5ceb83d85bd01197cc65eeaad3bf",
+      "licenses": [
+        {
+          "license": {
+            "name": "UNLICENSED"
+          }
+        }
+      ],
+      "purl": "pkg:servicenow/guided-intake@0.0.1?sys_scope_id=21ca5ceb83d85bd01197cc65eeaad3bf"
+    }
+  },
+  "components": [],
+  "dependencies": [
+    {
+      "ref": "pkg:servicenow/guided-intake@0.0.1?sys_scope_id=21ca5ceb83d85bd01197cc65eeaad3bf"
+    }
+  ]
+}]]></content>
+        <external_source>false</external_source>
+        <path>x_312586_gintake/guided-intake/0.0.1/bom.json</path>
+        <sys_class_name>sys_module</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-11-07 19:20:56</sys_created_on>
+        <sys_id>80328dfdd1f643d8993c7c2c35674dad</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_312586_gintake/guided-intake/0.0.1/bom.json</sys_name>
+        <sys_package display_value="Guided Intake" source="x_312586_gintake">21ca5ceb83d85bd01197cc65eeaad3bf</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Guided Intake">21ca5ceb83d85bd01197cc65eeaad3bf</sys_scope>
+        <sys_update_name>sys_module_80328dfdd1f643d8993c7c2c35674dad</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-11-07 19:20:56</sys_updated_on>
+    </sys_module>
+</record_update>

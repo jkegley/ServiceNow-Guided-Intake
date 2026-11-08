@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_documentation element="asked_by_user" label="Asked by user" language="en" table="x_312586_gintake_response">
+        <sys_documentation action="INSERT_OR_UPDATE">
+            <element>asked_by_user</element>
+            <help/>
+            <hint>The assessor, when asked by is Assessor</hint>
+            <label>Asked by user</label>
+            <language>en</language>
+            <name>x_312586_gintake_response</name>
+            <plural>Asked by users</plural>
+            <sys_class_name>sys_documentation</sys_class_name>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-07 19:20:34</sys_created_on>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>Asked by user</sys_name>
+            <sys_package display_value="Guided Intake" source="x_312586_gintake">21ca5ceb83d85bd01197cc65eeaad3bf</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="Guided Intake">21ca5ceb83d85bd01197cc65eeaad3bf</sys_scope>
+            <sys_update_name>sys_documentation_x_312586_gintake_response_asked_by_user_en</sys_update_name>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-07 19:20:34</sys_updated_on>
+            <url/>
+            <url_target/>
+        </sys_documentation>
+    </sys_documentation>
+</record_update>

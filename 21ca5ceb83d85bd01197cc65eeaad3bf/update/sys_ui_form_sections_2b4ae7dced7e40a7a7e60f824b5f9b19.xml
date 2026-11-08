@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_ui_form_sections form_id="2b4ae7dced7e40a7a7e60f824b5f9b19" sys_domain="global" table="x_312586_gintake_session" version="3">
+        <sys_ui_form_section action="INSERT_OR_UPDATE">
+            <position>0</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-07 19:22:44</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>3c0c524b056a4ed180b4a992c067843b</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_overrides/>
+            <sys_ui_form display_value="x_312586_gintake_session" name="x_312586_gintake_session" sys_domain="global" view="Default view">2b4ae7dced7e40a7a7e60f824b5f9b19</sys_ui_form>
+            <sys_ui_section caption="Session" display_value="Session" name="x_312586_gintake_session" sys_domain="global" view="Default view">4bf6c4a3077546358a4bf2175001152d</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-07 19:22:44</sys_updated_on>
+        </sys_ui_form_section>
+        <sys_ui_form_section action="INSERT_OR_UPDATE">
+            <position>1</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-07 19:22:44</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>0d4ee1ceaeb045b5b6b44968851f5ce1</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_overrides/>
+            <sys_ui_form display_value="x_312586_gintake_session" name="x_312586_gintake_session" sys_domain="global" view="Default view">2b4ae7dced7e40a7a7e60f824b5f9b19</sys_ui_form>
+            <sys_ui_section caption="Outcome" display_value="Outcome" name="x_312586_gintake_session" sys_domain="global" view="Default view">0db6a592f3244605b5feb8cb643ece2f</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-07 19:22:44</sys_updated_on>
+        </sys_ui_form_section>
+        <sys_ui_form action="INSERT_OR_UPDATE">
+            <name>x_312586_gintake_session</name>
+            <roles/>
+            <sys_class_name>sys_ui_form</sys_class_name>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-07 19:21:03</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>2b4ae7dced7e40a7a7e60f824b5f9b19</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>x_312586_gintake_session</sys_name>
+            <sys_overrides/>
+            <sys_package display_value="Guided Intake" source="x_312586_gintake">21ca5ceb83d85bd01197cc65eeaad3bf</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="Guided Intake">21ca5ceb83d85bd01197cc65eeaad3bf</sys_scope>
+            <sys_update_name>sys_ui_form_sections_2b4ae7dced7e40a7a7e60f824b5f9b19</sys_update_name>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-07 19:21:03</sys_updated_on>
+            <sys_user/>
+            <view display_value="Default view" name="NULL">Default view</view>
+            <view_name/>
+        </sys_ui_form>
+    </sys_ui_form_sections>
+</record_update>

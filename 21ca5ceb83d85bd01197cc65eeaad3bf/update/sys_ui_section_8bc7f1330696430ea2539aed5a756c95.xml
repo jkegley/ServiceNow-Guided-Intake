@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_ui_section caption="Retention" section_id="8bc7f1330696430ea2539aed5a756c95" sys_domain="global" table="x_312586_gintake_profile" version="3" view="">
+        <sys_ui_annotation action="INSERT_OR_UPDATE">
+            <is_plain_text>true</is_plain_text>
+            <name/>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-07 19:22:46</sys_created_on>
+            <sys_id>f1c89587036a40f68168420594d7f8c4</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-07 19:22:46</sys_updated_on>
+            <text>Sessions snapshot this policy when they start. Changing it affects new sessions only.</text>
+            <type display_value="Info Box Blue">753f88a80f930000b12e6903cfe01206</type>
+        </sys_ui_annotation>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>f1c89587036a40f68168420594d7f8c4</element>
+            <position>0</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-07 19:22:46</sys_created_on>
+            <sys_id>e8fc5faa305d45aaae757867512978c6</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="Retention" display_value="Retention" name="x_312586_gintake_profile" sys_domain="global" view="Default view">8bc7f1330696430ea2539aed5a756c95</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-07 19:22:46</sys_updated_on>
+            <sys_user/>
+            <type>annotation</type>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>.begin_split</element>
+            <position>1</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-07 19:22:46</sys_created_on>
+            <sys_id>48d17e5d8faf4863ae0f45341e451bcf</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="Retention" display_value="Retention" name="x_312586_gintake_profile" sys_domain="global" view="Default view">8bc7f1330696430ea2539aed5a756c95</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-07 19:22:46</sys_updated_on>
+            <sys_user/>
+            <type>.begin_split</type>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>transcript_retention</element>
+            <position>2</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-07 19:22:46</sys_created_on>
+            <sys_id>719004f50a0d469c80ebcaa06fca132e</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="Retention" display_value="Retention" name="x_312586_gintake_profile" sys_domain="global" view="Default view">8bc7f1330696430ea2539aed5a756c95</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-07 19:22:46</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>.split</element>
+            <position>3</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-07 19:22:46</sys_created_on>
+            <sys_id>c9c4aa668763464985e8295824163d56</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="Retention" display_value="Retention" name="x_312586_gintake_profile" sys_domain="global" view="Default view">8bc7f1330696430ea2539aed5a756c95</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-07 19:22:46</sys_updated_on>
+            <sys_user/>
+            <type>.split</type>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>transcript_retention_days</element>
+            <position>4</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-07 19:22:46</sys_created_on>
+            <sys_id>c35564086f334150bd277fdcb64da276</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="Retention" display_value="Retention" name="x_312586_gintake_profile" sys_domain="global" view="Default view">8bc7f1330696430ea2539aed5a756c95</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-07 19:22:46</sys_updated_on>
+            <sys_user/>
+            <type/>
+        </sys_ui_element>
+        <sys_ui_element action="INSERT_OR_UPDATE">
+            <element>.end_split</element>
+            <position>5</position>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-07 19:22:46</sys_created_on>
+            <sys_id>a0553be3278846adb86909801b461b32</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_ui_formatter/>
+            <sys_ui_section caption="Retention" display_value="Retention" name="x_312586_gintake_profile" sys_domain="global" view="Default view">8bc7f1330696430ea2539aed5a756c95</sys_ui_section>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-07 19:22:46</sys_updated_on>
+            <sys_user/>
+            <type>.end_split</type>
+        </sys_ui_element>
+        <sys_ui_section action="INSERT_OR_UPDATE">
+            <caption>Retention</caption>
+            <header>false</header>
+            <name>x_312586_gintake_profile</name>
+            <roles/>
+            <sys_class_name>sys_ui_section</sys_class_name>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-07 19:21:05</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_id>8bc7f1330696430ea2539aed5a756c95</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>x_312586_gintake_profile</sys_name>
+            <sys_overrides/>
+            <sys_package display_value="Guided Intake" source="x_312586_gintake">21ca5ceb83d85bd01197cc65eeaad3bf</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="Guided Intake">21ca5ceb83d85bd01197cc65eeaad3bf</sys_scope>
+            <sys_update_name>sys_ui_section_8bc7f1330696430ea2539aed5a756c95</sys_update_name>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-07 19:21:05</sys_updated_on>
+            <sys_user/>
+            <title>false</title>
+            <view display_value="Default view" name="NULL">Default view</view>
+            <view_name/>
+        </sys_ui_section>
+    </sys_ui_section>
+</record_update>
