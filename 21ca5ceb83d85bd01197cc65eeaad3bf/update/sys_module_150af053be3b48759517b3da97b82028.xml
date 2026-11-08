@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_module">
+    <sys_module action="INSERT_OR_UPDATE">
+        <content><![CDATA[import { GlideRecord, GlideFilter } from '@servicenow/glide';
+import { T } from './auth';
+import { badRequest, notFound, requireSysId } from './http';
+/** Lightweight list so the agent can pick a profile from the requester's intent. */
+export function listProfiles(targetTable) {
+    const out = [];
+    const p = new GlideRecord(T.profile);
+    p.addQuery('active', true);
+    if (targetTable)
+        p.addQuery('target_table', targetTable);
+    p.orderBy('order');
+    p.orderBy('name');
+    p.query();
+    while (p.next()) {
+        out.push({
+            id: p.getUniqueValue(),
+            name: p.getValue('name'),
+            description: p.getValue('description') || '',
+            target_table: p.getValue('target_table'),
+        });
+    }
+    return out;
+}
+/**
+ * Picks the lowest-order active profile for a target table whose
+ * applies_to condition matches the supplied context. The context is applied
+ * to an initialized, never-inserted GlideRecord of the target table, so the
+ * condition is evaluated by the platform's own filter engine.
+ */
+export function matchProfile(targetTable, context) {
+    if (!targetTable)
+        throw badRequest('target_table is required');
+    const probe = new GlideRecord(targetTable);
+    if (!probe.isValid())
+        throw badRequest('Unknown target_table: ' + targetTable);
+    probe.initialize();
+    const ignored = [];
+    for (const field in context || {}) {
+        if (probe.isValidField(field))
+            probe.setValue(field, context[field]);
+        else
+            ignored.push(field);
+    }
+    const p = new GlideRecord(T.profile);
+    p.addQuery('active', true);
+    p.addQuery('target_table', targetTable);
+    p.orderBy('order');
+    p.query();
+    while (p.next()) {
+        const cond = p.getValue('applies_to');
+        if (!cond || GlideFilter.checkRecord(probe, cond)) {
+            return { profile: profileBundle(p.getUniqueValue()), ignored_context_fields: ignored };
+        }
+    }
+    throw notFound('Matching intake profile');
+}
+/**
+ * Everything the coaching agent needs to run an interview, in one payload.
+ * Deliberately omits maps_to_field and submit wiring — the agent coaches;
+ * the platform maps.
+ */
+export function profileBundle(profileId) {
+    requireSysId(profileId, 'Profile id');
+    const p = new GlideRecord(T.profile);
+    if (!p.get(profileId) || p.getValue('active') !== '1')
+        throw notFound('Active intake profile');
+    const criteria = [];
+    const pc = new GlideRecord(T.profCrit);
+    pc.addQuery('profile', profileId);
+    pc.addQuery('active', true);
+    pc.addQuery('criterion.active', true);
+    pc.orderBy('order');
+    pc.query();
+    while (pc.next()) {
+        const c = pc.criterion.getRefRecord();
+        criteria.push({
+            criterion_id: c.getUniqueValue(),
+            name: c.getValue('name'),
+            category: c.getValue('category') || '',
+            requirement: pc.getValue('requirement'),
+            weight: parseInt(pc.getValue('weight') || '1', 10),
+            question_intent: c.getValue('question_intent') || '',
+            why_it_matters: c.getValue('why_it_matters') || '',
+            coaching_hints: c.getValue('coaching_hints') || '',
+            good_answer_example: c.getValue('good_answer_example') || '',
+            profile_guidance: pc.getValue('profile_guidance') || '',
+            answer_type: c.getValue('answer_type') || 'text',
+            answer_options: c.getValue('answer_options') || '',
+        });
+    }
+    return {
+        id: p.getUniqueValue(),
+        name: p.getValue('name'),
+        description: p.getValue('description') || '',
+        target_table: p.getValue('target_table'),
+        ready_threshold: parseInt(p.getValue('ready_threshold') || '80', 10),
+        agent_guidance: p.getValue('agent_guidance') || '',
+        transcript_retention: p.getValue('transcript_retention') || 'summary',
+        criteria,
+    };
+}
+]]></content>
+        <external_source>false</external_source>
+        <path>x_312586_gintake/guided-intake/0.0.1/src/server/lib/profiles.ts</path>
+        <sys_class_name>sys_module</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-11-07 19:20:56</sys_created_on>
+        <sys_id>150af053be3b48759517b3da97b82028</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_312586_gintake/guided-intake/0.0.1/src/server/lib/profiles.ts</sys_name>
+        <sys_package display_value="Guided Intake" source="x_312586_gintake">21ca5ceb83d85bd01197cc65eeaad3bf</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Guided Intake">21ca5ceb83d85bd01197cc65eeaad3bf</sys_scope>
+        <sys_update_name>sys_module_150af053be3b48759517b3da97b82028</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-11-07 19:20:56</sys_updated_on>
+    </sys_module>
+</record_update>

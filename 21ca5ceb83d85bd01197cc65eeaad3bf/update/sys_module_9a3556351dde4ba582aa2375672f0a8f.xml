@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_module">
+    <sys_module action="INSERT_OR_UPDATE">
+        <content><![CDATA[/*
+ * Pure readiness scoring — no Glide imports, so it is unit-testable off-platform.
+ *
+ *   points(criterion) = requirement multiplier × weight
+ *   credit by status  = answered 1 · not_applicable 1 · partial 0.5 · otherwise 0
+ *   score             = round(Σ points × credit / Σ points × 100)
+ *   ready             = no must-have gaps AND score ≥ profile threshold
+ *
+ * A must-have marked not_applicable earns credit but is surfaced in `flags`
+ * so assessors can challenge it; 'unknown' is flagged as an honest gap.
+ */
+export const MULTIPLIER = { must: 3, should: 2, nice: 1 };
+export const CREDIT = { answered: 1, not_applicable: 1, partial: 0.5 };
+/** Pure scoring core — no Glide dependencies, unit-testable. */
+export function score(items, threshold) {
+    let possible = 0;
+    let earned = 0;
+    const gaps = [];
+    const flags = [];
+    const breakdown = [];
+    let mustGaps = 0;
+    const rank = { must: 0, should: 1, nice: 2 };
+    const sorted = items.slice().sort((a, b) => rank[a.requirement] - rank[b.requirement] || a.order - b.order);
+    for (const it of sorted) {
+        const points = (MULTIPLIER[it.requirement] || 1) * Math.max(1, it.weight || 1);
+        const credit = it.status ? CREDIT[it.status] || 0 : 0;
+        possible += points;
+        earned += points * credit;
+        breakdown.push({ criterion_id: it.criterion_id, name: it.name, requirement: it.requirement, points, credit });
+        if (credit < 1) {
+            gaps.push({ criterion_id: it.criterion_id, name: it.name, requirement: it.requirement, status: it.status || 'not_asked' });
+            if (it.requirement === 'must')
+                mustGaps++;
+        }
+        if (it.requirement === 'must' && it.status === 'not_applicable') {
+            flags.push({ criterion_id: it.criterion_id, name: it.name, flag: 'must_marked_not_applicable' });
+        }
+        if (it.status === 'unknown') {
+            flags.push({ criterion_id: it.criterion_id, name: it.name, flag: 'requester_does_not_know' });
+        }
+    }
+    const pct = possible === 0 ? 100 : Math.round((earned / possible) * 100);
+    return {
+        score: pct,
+        threshold,
+        ready: mustGaps === 0 && pct >= threshold,
+        must_gaps: mustGaps,
+        gaps,
+        flags,
+        breakdown,
+    };
+}
+]]></content>
+        <external_source>false</external_source>
+        <path>x_312586_gintake/guided-intake/0.0.1/src/server/lib/scoring.ts</path>
+        <sys_class_name>sys_module</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-11-07 19:20:56</sys_created_on>
+        <sys_id>9a3556351dde4ba582aa2375672f0a8f</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_312586_gintake/guided-intake/0.0.1/src/server/lib/scoring.ts</sys_name>
+        <sys_package display_value="Guided Intake" source="x_312586_gintake">21ca5ceb83d85bd01197cc65eeaad3bf</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Guided Intake">21ca5ceb83d85bd01197cc65eeaad3bf</sys_scope>
+        <sys_update_name>sys_module_9a3556351dde4ba582aa2375672f0a8f</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-11-07 19:20:56</sys_updated_on>
+    </sys_module>
+</record_update>

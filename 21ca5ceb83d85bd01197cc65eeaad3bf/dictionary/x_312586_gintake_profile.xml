@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element audit="true" db_object_id="bd35e463835c5bd01197cc65eeaad3e9" label="Intake Profile" max_length="40" name="x_312586_gintake_profile" type="collection">
+        <element hint="Group accountable for this profile and its assessment criteria" label="Owner group" max_length="32" name="owner_group" reference="sys_user_group" type="reference"/>
+        <element dependent="target_table" hint="Optional condition against the target table, used to select sub-profiles (e.g. demand category)" label="Applies to" max_length="4000" name="applies_to" type="conditions"/>
+        <element default="true" label="Active" max_length="40" name="active" type="boolean"/>
+        <element default="100" hint="Precedence when more than one active profile matches; lowest wins" label="Order" max_length="40" name="order" type="integer"/>
+        <element default="80" hint="Readiness score (0-100) at which the requester is encouraged to submit" label="Ready threshold" max_length="40" name="ready_threshold" type="integer"/>
+        <element choice="3" default="summary" label="Transcript retention" max_length="40" name="transcript_retention" type="choice">
+            <choice>
+                <element inactive_on_update="false" label="Summary only" sequence="1" value="summary"/>
+                <element inactive_on_update="false" label="Full transcript (attachment)" sequence="2" value="full"/>
+                <element inactive_on_update="false" label="None — responses only" sequence="0" value="none"/>
+            </choice>
+        </element>
+        <element display="true" label="Name" mandatory="true" max_length="100" name="name" type="string"/>
+        <element label="Description" max_length="1000" name="description" type="multi_two_lines"/>
+        <element hint="Table the submitted intake creates or updates (e.g. dmn_demand)" label="Target table" mandatory="true" max_length="80" name="target_table" type="table_name"/>
+        <element hint="Profile-level context and tone for the coaching agent (audience, vocabulary, sensitivities)" label="Agent guidance" max_length="4000" name="agent_guidance" type="multi_two_lines"/>
+        <element default="365" hint="Days after submit before the transcript is purged; 0 keeps it indefinitely. Ignored when retention is None." label="Transcript retention (days)" max_length="40" name="transcript_retention_days" type="integer"/>
+        <element hint="Flow Designer subflow that creates or updates the target record on submit" label="Submit subflow" max_length="32" name="submit_subflow" reference="sys_hub_flow" reference_qual="type=subflow^active=true" type="reference"/>
+        <index name="index">
+            <element name="active"/>
+            <element name="target_table"/>
+            <element name="order"/>
+        </index>
+        <index name="index2">
+            <element name="owner_group"/>
+        </index>
+        <index name="index3">
+            <element name="submit_subflow"/>
+        </index>
+    </element>
+</database>

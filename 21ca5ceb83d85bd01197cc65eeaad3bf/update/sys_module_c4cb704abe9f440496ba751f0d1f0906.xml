@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_module">
+    <sys_module action="INSERT_OR_UPDATE">
+        <content><![CDATA[import { GlideRecord } from '@servicenow/glide';
+import { T } from './auth';
+import { score } from './scoring';
+/*
+ * Readiness is deterministic and explainable. The LLM judges whether an
+ * individual answer meets a criterion's intent (it sets the response
+ * status); scoring.ts only does arithmetic on those statuses, so any score
+ * can be explained to a requester or assessor line by line.
+ */
+const STATUS_RANK = { answered: 4, not_applicable: 3, partial: 2, unknown: 1 };
+/** Loads a session's profile criteria and responses, scores them, and persists the score. */
+export function computeReadiness(session, persist = true) {
+    const profileId = session.getValue('profile');
+    const profile = new GlideRecord(T.profile);
+    profile.get(profileId);
+    const threshold = parseInt(profile.getValue('ready_threshold') || '80', 10);
+    // Best status per criterion, ignoring open follow-ups ('requested').
+    const best = {};
+    const r = new GlideRecord(T.response);
+    r.addQuery('session', session.getUniqueValue());
+    r.addNotNullQuery('criterion');
+    r.addQuery('status', '!=', 'requested');
+    r.query();
+    while (r.next()) {
+        const c = r.getValue('criterion');
+        const st = r.getValue('status');
+        if (!best[c] || (STATUS_RANK[st] || 0) > (STATUS_RANK[best[c]] || 0))
+            best[c] = st;
+    }
+    const items = [];
+    const pc = new GlideRecord(T.profCrit);
+    pc.addQuery('profile', profileId);
+    pc.addQuery('active', true);
+    pc.addQuery('criterion.active', true);
+    pc.query();
+    while (pc.next()) {
+        const cid = pc.getValue('criterion');
+        items.push({
+            prof_crit_id: pc.getUniqueValue(),
+            criterion_id: cid,
+            name: pc.getDisplayValue('criterion'),
+            requirement: (pc.getValue('requirement') || 'should'),
+            weight: parseInt(pc.getValue('weight') || '1', 10),
+            order: parseInt(pc.getValue('order') || '100', 10),
+            status: best[cid] || null,
+        });
+    }
+    const result = score(items, threshold);
+    if (persist && String(result.score) !== session.getValue('readiness_score')) {
+        session.setValue('readiness_score', result.score);
+        session.update();
+    }
+    return result;
+}
+]]></content>
+        <external_source>false</external_source>
+        <path>x_312586_gintake/guided-intake/0.0.1/src/server/lib/readiness.ts</path>
+        <sys_class_name>sys_module</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-11-07 19:20:56</sys_created_on>
+        <sys_id>c4cb704abe9f440496ba751f0d1f0906</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_312586_gintake/guided-intake/0.0.1/src/server/lib/readiness.ts</sys_name>
+        <sys_package display_value="Guided Intake" source="x_312586_gintake">21ca5ceb83d85bd01197cc65eeaad3bf</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Guided Intake">21ca5ceb83d85bd01197cc65eeaad3bf</sys_scope>
+        <sys_update_name>sys_module_c4cb704abe9f440496ba751f0d1f0906</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-11-07 19:20:56</sys_updated_on>
+    </sys_module>
+</record_update>

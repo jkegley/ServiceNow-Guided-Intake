@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ws_definition">
+    <sys_ws_definition action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <base_uri>/api/x_312586_gintake/intake</base_uri>
+        <consumes>application/json</consumes>
+        <consumes_customized>true</consumes_customized>
+        <default_version>v1</default_version>
+        <doc_link/>
+        <enforce_acl>b2c00639b2a7424094c03b7bbc939031</enforce_acl>
+        <is_versioned>true</is_versioned>
+        <name>Guided Intake</name>
+        <namespace>x_312586_gintake</namespace>
+        <produces>application/json</produces>
+        <produces_customized>true</produces_customized>
+        <service_id>intake</service_id>
+        <short_description>Profile discovery, coaching sessions, responses, readiness, submit, and follow-u</short_description>
+        <sys_class_name>sys_ws_definition</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-11-07 19:21:08</sys_created_on>
+        <sys_id>fdf9b209b3ba4376822a97ba8cc491b6</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Guided Intake</sys_name>
+        <sys_package display_value="Guided Intake" source="x_312586_gintake">21ca5ceb83d85bd01197cc65eeaad3bf</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Guided Intake">21ca5ceb83d85bd01197cc65eeaad3bf</sys_scope>
+        <sys_update_name>sys_ws_definition_fdf9b209b3ba4376822a97ba8cc491b6</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-11-07 19:21:08</sys_updated_on>
+    </sys_ws_definition>
+</record_update>

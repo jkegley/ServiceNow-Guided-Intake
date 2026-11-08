@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_module">
+    <sys_module action="INSERT_OR_UPDATE">
+        <content><![CDATA[import { gs } from '@servicenow/glide';
+/** Error carrying an HTTP status and a stable machine-readable code. */
+export class ApiError {
+    status;
+    code;
+    message;
+    details;
+    constructor(status, code, message, details) {
+        this.status = status;
+        this.code = code;
+        this.message = message;
+        this.details = details;
+    }
+}
+export const badRequest = (message, details) => new ApiError(400, 'bad_request', message, details);
+export const forbidden = (message = 'Not permitted') => new ApiError(403, 'forbidden', message);
+export const notFound = (what) => new ApiError(404, 'not_found', what + ' not found');
+export const conflict = (code, message, details) => new ApiError(409, code, message, details);
+/** Request body as an object; empty bodies become {}. */
+export function body(request) {
+    try {
+        const data = request.body ? request.body.data : null;
+        return data && typeof data === 'object' ? data : {};
+    }
+    catch (e) {
+        throw badRequest('Request body must be valid JSON');
+    }
+}
+/** First value of a query parameter (the platform delivers arrays). */
+export function query(request, name) {
+    const v = request.queryParams ? request.queryParams[name] : undefined;
+    if (v === undefined || v === null)
+        return '';
+    return String(Array.isArray(v) ? v[0] : v);
+}
+export function pathParam(request, name) {
+    return String((request.pathParams && request.pathParams[name]) || '');
+}
+/** 32-char hex sys_id check, so bad ids fail fast as 400 rather than as empty queries. */
+export function requireSysId(value, label) {
+    if (!/^[0-9a-f]{32}$/.test(value || ''))
+        throw badRequest(label + ' must be a 32-character sys_id');
+    return value;
+}
+/**
+ * Runs a route handler with a consistent envelope:
+ *   success → { result: ... }
+ *   failure → { error: { code, message, details? } }
+ * Unexpected errors are logged and returned as 500 without internals.
+ */
+export function handle(request, response, handler) {
+    try {
+        const out = handler(request);
+        response.setStatus(out.status || 200);
+        response.setBody({ result: out.result });
+    }
+    catch (e) {
+        if (e instanceof ApiError) {
+            response.setStatus(e.status);
+            response.setBody({ error: { code: e.code, message: e.message, details: e.details } });
+            return;
+        }
+        gs.error('[Guided Intake API] ' + (e && e.message ? e.message : String(e)));
+        response.setStatus(500);
+        response.setBody({ error: { code: 'internal_error', message: 'Unexpected error; see system log' } });
+    }
+}
+]]></content>
+        <external_source>false</external_source>
+        <path>x_312586_gintake/guided-intake/0.0.1/src/server/lib/http.ts</path>
+        <sys_class_name>sys_module</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-11-07 19:20:56</sys_created_on>
+        <sys_id>15afba9237d44a3aa18a4a13902ddfea</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_312586_gintake/guided-intake/0.0.1/src/server/lib/http.ts</sys_name>
+        <sys_package display_value="Guided Intake" source="x_312586_gintake">21ca5ceb83d85bd01197cc65eeaad3bf</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Guided Intake">21ca5ceb83d85bd01197cc65eeaad3bf</sys_scope>
+        <sys_update_name>sys_module_15afba9237d44a3aa18a4a13902ddfea</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-11-07 19:20:56</sys_updated_on>
+    </sys_module>
+</record_update>

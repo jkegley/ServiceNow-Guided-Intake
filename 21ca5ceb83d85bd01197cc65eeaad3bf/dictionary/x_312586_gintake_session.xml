@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element audit="true" db_object_id="2e356863835c5bd01197cc65eeaad37e" label="Intake Session" max_length="40" name="x_312586_gintake_session" type="collection">
+        <element default="javascript:gs.getUserID()" label="Requester" mandatory="true" max_length="32" name="requester" reference="sys_user" type="reference"/>
+        <element label="Target table" max_length="80" name="target_table" read_only="true" read_only_option="instance_configured" type="table_name"/>
+        <element choice="3" default="in_progress" label="State" max_length="40" name="state" type="choice">
+            <choice>
+                <element inactive_on_update="false" label="In progress" sequence="0" value="in_progress"/>
+                <element inactive_on_update="false" label="Abandoned" sequence="2" value="abandoned"/>
+                <element inactive_on_update="false" label="Submitted" sequence="1" value="submitted"/>
+            </choice>
+        </element>
+        <element hint="Calculated server-side from must/should coverage and weights; never set by the agent" label="Readiness score" max_length="40" name="readiness_score" read_only="true" read_only_option="instance_configured" type="integer"/>
+        <element dependent="target_table" dependent_on_field="target_table" label="Target record" max_length="32" name="target_record" read_only="true" read_only_option="instance_configured" type="document_id" use_dependent_field="true"/>
+        <element default="javascript:global.getNextObjNumberPadded();" display="true" label="Number" max_length="40" name="number" read_only="true" read_only_option="instance_configured" type="string"/>
+        <element choice="3" default="summary" hint="Snapshot of the profile's policy at session start, so later policy changes are not retroactive" label="Transcript retention" max_length="40" name="transcript_retention" read_only="true" read_only_option="instance_configured" type="choice">
+            <choice>
+                <element inactive_on_update="false" label="Summary only" sequence="1" value="summary"/>
+                <element inactive_on_update="false" label="Full transcript (attachment)" sequence="2" value="full"/>
+                <element inactive_on_update="false" label="None — responses only" sequence="0" value="none"/>
+            </choice>
+        </element>
+        <element label="Profile" mandatory="true" max_length="32" name="profile" reference="x_312586_gintake_profile" reference_cascade_rule="restrict" type="reference"/>
+        <element label="Summary" max_length="8000" name="summary" type="multi_two_lines"/>
+        <element choice="3" default="claude" label="Channel" max_length="40" name="channel" type="choice">
+            <choice>
+                <element inactive_on_update="false" label="Other" sequence="3" value="other"/>
+                <element inactive_on_update="false" label="Claude" sequence="0" value="claude"/>
+                <element inactive_on_update="false" label="Microsoft Copilot" sequence="1" value="copilot"/>
+                <element inactive_on_update="false" label="Service Portal" sequence="2" value="portal"/>
+            </choice>
+        </element>
+        <element label="Submitted on" max_length="40" name="submitted_on" read_only="true" read_only_option="instance_configured" type="glide_date_time"/>
+        <element hint="Set at submit from the profile's retention days (Full transcript only); empty means keep" label="Transcript purge on" max_length="40" name="transcript_purge_on" read_only="true" read_only_option="instance_configured" type="glide_date"/>
+        <index name="index">
+            <element name="profile"/>
+        </index>
+        <index name="index2">
+            <element name="requester"/>
+        </index>
+        <index name="index3">
+            <element name="requester"/>
+            <element name="state"/>
+        </index>
+        <index name="index4">
+            <element name="target_record"/>
+        </index>
+        <index name="index5">
+            <element name="transcript_purge_on"/>
+        </index>
+    </element>
+</database>

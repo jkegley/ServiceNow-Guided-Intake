@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element audit="true" db_object_id="5d35e463835c5bd01197cc65eeaad30a" label="Intake Criterion" max_length="40" name="x_312586_gintake_criterion" type="collection">
+        <element hint="Follow-up probes and common gaps the agent should watch for" label="Coaching hints" max_length="4000" name="coaching_hints" type="multi_two_lines"/>
+        <element default="true" label="Active" max_length="40" name="active" type="boolean"/>
+        <element hint="What a sufficient answer looks like; used to judge answer completeness" label="Good answer example" max_length="2000" name="good_answer_example" type="multi_two_lines"/>
+        <element hint="What we need to learn — the agent phrases the actual question" label="Question intent" mandatory="true" max_length="1000" name="question_intent" type="multi_two_lines"/>
+        <element hint="For Choice: one value|label per line. For Reference: the referenced table name." label="Answer options" max_length="2000" name="answer_options" type="multi_two_lines"/>
+        <element choice="2" label="Category" max_length="60" name="category" type="string">
+            <choice>
+                <element inactive_on_update="false" label="Technical" sequence="7" value="technical"/>
+                <element inactive_on_update="false" label="Ownership" sequence="4" value="ownership"/>
+                <element inactive_on_update="false" label="Cost and effort" sequence="3" value="cost_effort"/>
+                <element inactive_on_update="false" label="Business value" sequence="1" value="business_value"/>
+                <element inactive_on_update="false" label="Timing" sequence="5" value="timing"/>
+                <element inactive_on_update="false" label="Compliance" sequence="6" value="compliance"/>
+                <element inactive_on_update="false" label="Risk" sequence="2" value="risk"/>
+            </choice>
+        </element>
+        <element choice="3" default="text" label="Answer type" max_length="40" name="answer_type" type="choice">
+            <choice>
+                <element inactive_on_update="false" label="Text" sequence="0" value="text"/>
+                <element inactive_on_update="false" label="Number" sequence="1" value="number"/>
+                <element inactive_on_update="false" label="Choice" sequence="4" value="choice"/>
+                <element inactive_on_update="false" label="Reference" sequence="5" value="reference"/>
+                <element inactive_on_update="false" label="Yes / No" sequence="3" value="boolean"/>
+                <element inactive_on_update="false" label="Date" sequence="2" value="date"/>
+            </choice>
+        </element>
+        <element display="true" label="Name" mandatory="true" max_length="100" name="name" type="string" unique="true"/>
+        <element hint="Shared with the requester so they understand what assessors are weighing" label="Why it matters" max_length="1000" name="why_it_matters" type="multi_two_lines"/>
+        <index name="index" unique="true">
+            <element name="name"/>
+        </index>
+    </element>
+</database>

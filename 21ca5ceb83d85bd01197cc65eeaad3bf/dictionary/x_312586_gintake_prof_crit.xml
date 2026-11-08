@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element audit="true" db_object_id="02352863835c5bd01197cc65eeaad3b0" label="Profile Criterion" max_length="40" name="x_312586_gintake_prof_crit" type="collection">
+        <element label="Profile" mandatory="true" max_length="32" name="profile" reference="x_312586_gintake_profile" reference_cascade_rule="delete" type="reference"/>
+        <element hint="Optional column on the profile's target table to populate on submit (core fields only)" label="Maps to field" max_length="80" name="maps_to_field" type="string"/>
+        <element default="true" label="Active" max_length="40" name="active" type="boolean"/>
+        <element default="1" label="Weight" max_length="40" name="weight" type="integer"/>
+        <element hint="Extra coaching for this criterion in this profile only; the library wording stays shared" label="Profile-specific guidance" max_length="2000" name="profile_guidance" type="multi_two_lines"/>
+        <element display="true" label="Criterion" mandatory="true" max_length="32" name="criterion" reference="x_312586_gintake_criterion" reference_cascade_rule="restrict" reference_qual="active=true" type="reference"/>
+        <element choice="3" default="should" label="Requirement" max_length="40" name="requirement" type="choice">
+            <choice>
+                <element inactive_on_update="false" label="Nice to have" sequence="2" value="nice"/>
+                <element inactive_on_update="false" label="Must have" sequence="0" value="must"/>
+                <element inactive_on_update="false" label="Should have" sequence="1" value="should"/>
+            </choice>
+        </element>
+        <element default="100" label="Order" max_length="40" name="order" type="integer"/>
+        <index name="index">
+            <element name="criterion"/>
+        </index>
+        <index name="index2" unique="true">
+            <element name="profile"/>
+            <element name="criterion"/>
+        </index>
+        <index name="index3">
+            <element name="profile"/>
+        </index>
+    </element>
+</database>

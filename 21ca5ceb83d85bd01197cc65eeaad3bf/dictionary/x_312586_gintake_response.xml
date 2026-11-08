@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element audit="true" db_object_id="0f35a863835c5bd01197cc65eeaad38b" label="Intake Response" max_length="40" name="x_312586_gintake_response" type="collection">
+        <element choice="3" default="agent" label="Asked by" max_length="40" name="asked_by" type="choice">
+            <choice>
+                <element inactive_on_update="false" label="Coaching agent" sequence="0" value="agent"/>
+                <element inactive_on_update="false" label="Assessor" sequence="1" value="assessor"/>
+            </choice>
+        </element>
+        <element hint="Empty for ad-hoc assessor questions" label="Criterion" max_length="32" name="criterion" reference="x_312586_gintake_criterion" reference_cascade_rule="restrict" type="reference"/>
+        <element label="Answered on" max_length="40" name="answered_on" type="glide_date_time"/>
+        <element hint="The requester's own words — never rewritten" label="Requester verbatim" max_length="8000" name="requester_verbatim" type="multi_two_lines"/>
+        <element dependent="target_table" dependent_on_field="target_table" hint="Back-filled at submit so consuming tables can show responses in a related list" label="Target record" max_length="32" name="target_record" read_only="true" read_only_option="instance_configured" type="document_id" use_dependent_field="true"/>
+        <element hint="Normalized machine value for typed answers (number, yyyy-MM-dd, true/false, choice value, sys_id); validated against the criterion answer type" label="Answer value" max_length="4000" name="answer_value" type="string"/>
+        <element hint="The agent's cleaned-up version, kept separate from the requester's words" label="AI summary" max_length="4000" name="ai_summary" type="multi_two_lines"/>
+        <element choice="3" default="answered" label="Status" max_length="40" name="status" type="choice">
+            <choice>
+                <element inactive_on_update="false" label="Answered" sequence="1" value="answered"/>
+                <element inactive_on_update="false" label="Not applicable" sequence="4" value="not_applicable"/>
+                <element inactive_on_update="false" label="Unknown" sequence="3" value="unknown"/>
+                <element inactive_on_update="false" label="Partially answered" sequence="2" value="partial"/>
+                <element inactive_on_update="false" label="Requested" sequence="0" value="requested"/>
+            </choice>
+        </element>
+        <element label="Session" mandatory="true" max_length="32" name="session" reference="x_312586_gintake_session" reference_cascade_rule="delete" type="reference"/>
+        <element hint="The assessor, when asked by is Assessor" label="Asked by user" max_length="32" name="asked_by_user" reference="sys_user" type="reference"/>
+        <element display="true" hint="Snapshot of the question as actually asked; survives later criterion edits" label="Question asked" mandatory="true" max_length="1000" name="question_asked" type="string"/>
+        <element label="Target table" max_length="80" name="target_table" read_only="true" read_only_option="instance_configured" type="table_name"/>
+        <index name="index">
+            <element name="asked_by_user"/>
+        </index>
+        <index name="index2">
+            <element name="criterion"/>
+        </index>
+        <index name="index3">
+            <element name="session"/>
+            <element name="criterion"/>
+        </index>
+        <index name="index4">
+            <element name="status"/>
+            <element name="session"/>
+        </index>
+        <index name="index5">
+            <element name="target_record"/>
+        </index>
+    </element>
+</database>

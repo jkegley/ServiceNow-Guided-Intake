@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_module">
+    <sys_module action="INSERT_OR_UPDATE">
+        <content><![CDATA[import { GlideRecord, GlideDateTime } from '@servicenow/glide';
+import { T } from './auth';
+import { badRequest, conflict, notFound, requireSysId } from './http';
+const REQUESTER_STATUSES = ['answered', 'partial', 'unknown', 'not_applicable'];
+/**
+ * Validates a normalized answer_value against the criterion's answer type.
+ * Only checked when status claims the answer is usable (answered/partial);
+ * unknown and not_applicable carry no value by definition.
+ */
+export function validateAnswerValue(criterion, value) {
+    if (value === undefined || value === null || value === '')
+        return null;
+    const type = criterion.getValue('answer_type') || 'text';
+    const v = String(value).trim();
+    switch (type) {
+        case 'number':
+            if (isNaN(Number(v)))
+                return 'answer_value must be a number';
+            return null;
+        case 'date':
+            if (!/^\d{4}-\d{2}-\d{2}$/.test(v))
+                return 'answer_value must be yyyy-MM-dd';
+            return null;
+        case 'boolean':
+            if (v !== 'true' && v !== 'false')
+                return "answer_value must be 'true' or 'false'";
+            return null;
+        case 'choice': {
+            const allowed = (criterion.getValue('answer_options') || '')
+                .split('\n')
+                .map((l) => l.split('|')[0].trim())
+                .filter((x) => x);
+            if (allowed.length && allowed.indexOf(v) < 0)
+                return 'answer_value must be one of: ' + allowed.join(', ');
+            return null;
+        }
+        case 'reference': {
+            const table = (criterion.getValue('answer_options') || '').trim();
+            if (!table)
+                return null;
+            if (!/^[0-9a-f]{32}$/.test(v))
+                return 'answer_value must be a sys_id';
+            const ref = new GlideRecord(table);
+            if (!ref.isValid() || !ref.get(v))
+                return 'answer_value does not exist in ' + table;
+            return null;
+        }
+        default:
+            return null;
+    }
+}
+/** The set of criterion ids that are active on this session's profile. */
+function profileCriterionIds(profileId) {
+    const ids = {};
+    const pc = new GlideRecord(T.profCrit);
+    pc.addQuery('profile', profileId);
+    pc.addQuery('active', true);
+    pc.query();
+    while (pc.next())
+        ids[pc.getValue('criterion')] = true;
+    return ids;
+}
+/**
+ * Batch upsert. Resolution order for each item:
+ *   1. response_id            → update that response (incl. answering a follow-up)
+ *   2. criterion_id           → update the agent-asked response for that criterion, or insert
+ *   3. neither                → insert an ad-hoc response (question_asked required)
+ *
+ * Writes are rejected on submitted/abandoned sessions EXCEPT answers to open
+ * follow-ups, which by design arrive after submit.
+ */
+export function upsertResponses(session, items) {
+    if (!Array.isArray(items) || items.length === 0)
+        throw badRequest('responses must be a non-empty array');
+    if (items.length > 50)
+        throw badRequest('At most 50 responses per call');
+    const inProgress = session.getValue('state') === 'in_progress';
+    const allowed = profileCriterionIds(session.getValue('profile'));
+    const written = [];
+    const errors = [];
+    items.forEach((it, index) => {
+        try {
+            written.push(upsertOne(session, it, inProgress, allowed));
+        }
+        catch (e) {
+            errors.push({ index, code: e.code || 'error', message: e.message || String(e) });
+        }
+    });
+    return { written, errors };
+}
+function upsertOne(session, it, inProgress, allowed) {
+    const sessionId = session.getUniqueValue();
+    const status = it.status || 'answered';
+    if (REQUESTER_STATUSES.indexOf(status) < 0) {
+        throw badRequest('status must be one of ' + REQUESTER_STATUSES.join(', '));
+    }
+    let r = new GlideRecord(T.response);
+    let isNew = false;
+    if (it.response_id) {
+        requireSysId(it.response_id, 'response_id');
+        if (!r.get(it.response_id) || r.getValue('session') !== sessionId)
+            throw notFound('Response');
+    }
+    else if (it.criterion_id) {
+        requireSysId(it.criterion_id, 'criterion_id');
+        if (!allowed[it.criterion_id])
+            throw badRequest('criterion_id is not active on this profile');
+        r.addQuery('session', sessionId);
+        r.addQuery('criterion', it.criterion_id);
+        r.addQuery('asked_by', 'agent');
+        r.setLimit(1);
+        r.query();
+        if (!r.next()) {
+            r = new GlideRecord(T.response);
+            r.initialize();
+            isNew = true;
+        }
+    }
+    else {
+        r.initialize();
+        isNew = true;
+    }
+    const answeringFollowUp = !isNew && r.getValue('status') === 'requested';
+    if (!inProgress && !answeringFollowUp) {
+        throw conflict('session_closed', 'Session is ' + session.getValue('state') + '; only open follow-ups can be answered');
+    }
+    if (isNew) {
+        if (!it.question_asked)
+            throw badRequest('question_asked is required for new responses');
+        r.setValue('session', sessionId);
+        r.setValue('asked_by', 'agent');
+        if (it.criterion_id)
+            r.setValue('criterion', it.criterion_id);
+        // Late inserts inherit the target link so they show on the target record.
+        r.setValue('target_table', session.getValue('target_table'));
+        r.setValue('target_record', session.getValue('target_record'));
+    }
+    // Question text is a snapshot: set on insert, never rewritten by answers.
+    if (isNew && it.question_asked)
+        r.setValue('question_asked', String(it.question_asked).substring(0, 1000));
+    // Typed validation against the criterion, when there is one.
+    const criterionId = r.getValue('criterion');
+    if (criterionId && (status === 'answered' || status === 'partial')) {
+        const c = new GlideRecord(T.criterion);
+        c.get(criterionId);
+        const problem = validateAnswerValue(c, it.answer_value);
+        if (problem)
+            throw badRequest(problem);
+    }
+    if (it.requester_verbatim !== undefined)
+        r.setValue('requester_verbatim', it.requester_verbatim);
+    if (it.ai_summary !== undefined)
+        r.setValue('ai_summary', it.ai_summary);
+    if (it.answer_value !== undefined)
+        r.setValue('answer_value', status === 'unknown' || status === 'not_applicable' ? '' : it.answer_value);
+    r.setValue('status', status);
+    r.setValue('answered_on', new GlideDateTime().getValue());
+    const id = isNew ? r.insert() : (r.update(), r.getUniqueValue());
+    if (!id)
+        throw badRequest('Response could not be saved');
+    return { response_id: id, criterion_id: criterionId || null, status, created: isNew, answered_follow_up: answeringFollowUp };
+}
+/** Serializes a response for API output. */
+export function responseJson(r) {
+    return {
+        response_id: r.getUniqueValue(),
+        criterion_id: r.getValue('criterion') || null,
+        criterion_name: r.getValue('criterion') ? r.getDisplayValue('criterion') : null,
+        question_asked: r.getValue('question_asked'),
+        requester_verbatim: r.getValue('requester_verbatim') || '',
+        ai_summary: r.getValue('ai_summary') || '',
+        answer_value: r.getValue('answer_value') || '',
+        status: r.getValue('status'),
+        asked_by: r.getValue('asked_by'),
+        asked_by_user: r.getValue('asked_by_user') ? r.getDisplayValue('asked_by_user') : null,
+        answered_on: r.getValue('answered_on') || null,
+    };
+}
+]]></content>
+        <external_source>false</external_source>
+        <path>x_312586_gintake/guided-intake/0.0.1/src/server/lib/responses.ts</path>
+        <sys_class_name>sys_module</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2026-11-07 19:20:56</sys_created_on>
+        <sys_id>9352708f13b549ef82f55397ccb5fbe6</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_312586_gintake/guided-intake/0.0.1/src/server/lib/responses.ts</sys_name>
+        <sys_package display_value="Guided Intake" source="x_312586_gintake">21ca5ceb83d85bd01197cc65eeaad3bf</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Guided Intake">21ca5ceb83d85bd01197cc65eeaad3bf</sys_scope>
+        <sys_update_name>sys_module_9352708f13b549ef82f55397ccb5fbe6</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2026-11-07 19:20:56</sys_updated_on>
+    </sys_module>
+</record_update>

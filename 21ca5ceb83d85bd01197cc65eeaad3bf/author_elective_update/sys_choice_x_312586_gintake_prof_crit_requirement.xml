@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_choice action="INSERT_OR_UPDATE" field="requirement" table="x_312586_gintake_prof_crit" version="3">
+        <sys_choice_set action="INSERT_OR_UPDATE">
+            <element>requirement</element>
+            <name>x_312586_gintake_prof_crit</name>
+            <sys_class_name>sys_choice_set</sys_class_name>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-07 19:20:32</sys_created_on>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>requirement</sys_name>
+            <sys_package display_value="Guided Intake" source="x_312586_gintake">21ca5ceb83d85bd01197cc65eeaad3bf</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="Guided Intake">21ca5ceb83d85bd01197cc65eeaad3bf</sys_scope>
+            <sys_update_name>sys_choice_x_312586_gintake_prof_crit_requirement</sys_update_name>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-07 19:20:32</sys_updated_on>
+        </sys_choice_set>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>requirement</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Must have</label>
+            <language>en</language>
+            <name>x_312586_gintake_prof_crit</name>
+            <sequence>0</sequence>
+            <synonyms/>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-07 19:22:49</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-07 19:22:49</sys_updated_on>
+            <value>must</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>requirement</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Should have</label>
+            <language>en</language>
+            <name>x_312586_gintake_prof_crit</name>
+            <sequence>1</sequence>
+            <synonyms/>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-07 19:22:49</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-07 19:22:49</sys_updated_on>
+            <value>should</value>
+        </sys_choice>
+        <sys_choice action="INSERT_OR_UPDATE">
+            <dependent_value/>
+            <element>requirement</element>
+            <hint/>
+            <inactive>false</inactive>
+            <label>Nice to have</label>
+            <language>en</language>
+            <name>x_312586_gintake_prof_crit</name>
+            <sequence>2</sequence>
+            <synonyms/>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2026-11-07 19:22:49</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_domain_path>/</sys_domain_path>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2026-11-07 19:22:49</sys_updated_on>
+            <value>nice</value>
+        </sys_choice>
+    </sys_choice>
+</record_update>
