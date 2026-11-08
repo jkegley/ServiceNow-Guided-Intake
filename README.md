@@ -1,6 +1,6 @@
 # Guided Intake — Administration, Configuration, and Use
 
-Nov 7, 2026 · Jake
+Nov 7, 2026 · Jake Kegley
 
 ## Overview
 
